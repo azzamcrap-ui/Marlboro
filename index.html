@@ -1,0 +1,255 @@
+<!doctype html>
+<!--
+  TK-EDU Game - HTML/CSS/JS
+  Copyright © 2026 MTsN 1 Lamongan
+  Licensed for educational use.
+-->
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EDU Game  - Anak SD/MI</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg">
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <img class="logo-img" src="logo mtsn 1 lamongan.jpeg" alt="Logo MTsN 1 Lamongan" onerror="this.style.display='none'" />
+        <span class="logo-fallback" aria-hidden="true">🎓</span>
+      </div>
+      <div>
+        <div class="brand-title">Matsanela EDU Game</div>
+        <div class="brand-sub">Belajar sambil bermain untuk SD/MI</div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Skor</div>
+        <div id="score" class="stat-value">0</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Nyawa</div>
+        <div id="lives" class="stat-value">3</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Level</div>
+        <div id="level" class="stat-value">1</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- SFX (audio) -->
+    <div style="display:none">
+      <audio id="sfx-start" preload="auto" src="sfx-start.mp3"></audio>
+      <audio id="sfx-next" preload="auto" src="sfx-next.mp3"></audio>
+      <audio id="sfx-correct" preload="auto" src="sfx-correct.mp3"></audio>
+      <audio id="sfx-wrong" preload="auto" src="sfx-wrong.mp3"></audio>
+      <audio id="sfx-gameover" preload="auto" src="sfx-gameover.mp3"></audio>
+    </div>
+
+    <!-- HOME -->
+    <section id="screen-home" class="screen">
+      <div class="hero">
+        <div class="hero-copy">
+          <h1>Hai, ayo belajar bareng Bu Guru! 👩‍🏫</h1>
+          <p>
+            Kerjakan soal edukasi dengan memilih jawaban yang benar.
+            Setiap pilihan membuat kamu makin pintar.
+          </p>
+          <div class="cta-row">
+            <button id="btn-start" class="btn primary">
+              Mulai Bermain
+            </button>
+            <button id="btn-how" class="btn ghost">
+              Cara Bermain
+            </button>
+          </div>
+
+          <div id="how-box" class="how-box" hidden>
+            <ul>
+              <li>Pilih jawaban A/B/C.</li>
+              <li>Kalau benar, skor bertambah.</li>
+              <li>Kalau salah, nyawa berkurang.</li>
+              <li>Setiap level punya tema berbeda.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="teacher-card" aria-label="Bu Guru">
+          <div class="teacher">
+            <div class="teacher-face">
+              <div class="eyes">
+                <div class="eye"></div>
+                <div class="eye"></div>
+              </div>
+              <div class="smile"></div>
+            </div>
+            <div class="teacher-body">
+              <div class="scarf"></div>
+            </div>
+          </div>
+          <div class="speech">
+            <div class="bubble">Semangat ya! 🤩</div>
+            <div class="bubble b2">Pilih jawaban dengan hati-hati!</div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer-note">
+        Tips: Coba gunakan layar full screen untuk tampilan lebih enak.
+      </footer>
+    </section>
+
+    <!-- GAME -->
+    <section id="screen-game" class="screen" hidden>
+      <div class="grid">
+        <div class="panel-left">
+          <div class="teacher-inline">
+            <div class="teacher-mini" aria-hidden="true">
+              <div class="tm-face">
+                <div class="tm-eyes">
+                  <span></span><span></span>
+                </div>
+                <div class="tm-mouth"></div>
+              </div>
+              <div class="tm-body"></div>
+            </div>
+            <div class="speech-inline">
+              <div class="bubble" id="teacher-speech">Siap ya, ini soal pertamanya!</div>
+            </div>
+          </div>
+
+          <div class="quest-card">
+            <div class="tag" id="tag-theme">Tema: -</div>
+            <h2 id="question-title">Pertanyaan</h2>
+
+            <div class="answers">
+              <button class="answer" data-key="A">
+                <span class="letter">A</span>
+                <span class="text" id="ans-a">Jawaban A</span>
+              </button>
+              <button class="answer" data-key="B">
+                <span class="letter">B</span>
+                <span class="text" id="ans-b">Jawaban B</span>
+              </button>
+              <button class="answer" data-key="C">
+                <span class="letter">C</span>
+                <span class="text" id="ans-c">Jawaban C</span>
+              </button>
+            </div>
+
+            <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+
+            <div class="nav-row">
+              <button id="btn-next" class="btn primary" disabled>
+                Lanjut
+              </button>
+              <button id="btn-restart" class="btn ghost">
+                Mulai Ulang
+              </button>
+              <button id="btn-back-home" class="btn ghost">
+                Home
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <aside class="panel-right">
+          <div class="progress-card">
+            <div class="progress-header">
+              <div class="progress-title">Perjalanan Kamu</div>
+              <div class="progress-sub">Soal <span id="q-index">1</span>/<span id="q-total">10</span></div>
+            </div>
+            <div class="timer-card" aria-live="polite">
+              <div class="timer-label">Timer</div>
+              <div class="timer-value">
+                <span id="timer-text">5</span> detik
+              </div>
+            </div>
+
+            <div class="bar">
+              <div class="bar-fill" id="bar-fill"></div>
+            </div>
+
+            <div class="mini-stats">
+              <div class="mini-item">
+                <div class="mini-label">Benar</div>
+                <div id="count-correct" class="mini-value">0</div>
+              </div>
+              <div class="mini-item">
+                <div class="mini-label">Salah</div>
+                <div id="count-wrong" class="mini-value">0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="theme-list">
+            <div class="theme-head">Tema Hari Ini</div>
+            <div class="theme-pill" id="pill-1">✅ Perkalian</div>
+            <div class="theme-pill" id="pill-2">✅ penjumlahan</div>
+            <div class="theme-pill" id="pill-3">✅ pengurangan</div>
+            <div class="theme-pill" id="pill-4">✅ bahasa inggris</div>
+          </div>
+
+          <div class="tips">
+            <div class="tips-head">Biar Makin Seru</div>
+            <ul>
+              <li>Bangun kebiasaan baik di sekolah dan rumah.</li>
+              <li>Jawab dengan sopan dan jujur.</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- END -->
+    <section id="screen-end" class="screen" hidden>
+      <div class="end-card">
+        <div class="end-icon" aria-hidden="true">🏆</div>
+        <h2 id="end-title">Selamat!</h2>
+        <p id="end-summary"></p>
+
+        <div class="end-stats">
+          <div class="end-stat">
+            <div class="end-stat-label">Skor</div>
+            <div id="end-score" class="end-stat-value">0</div>
+          </div>
+          <div class="end-stat">
+            <div class="end-stat-label">Benar</div>
+            <div id="end-correct" class="end-stat-value">0</div>
+          </div>
+          <div class="end-stat">
+            <div class="end-stat-label">Salah</div>
+            <div id="end-wrong" class="end-stat-value">0</div>
+          </div>
+        </div>
+
+        <div class="cta-row">
+          <button id="btn-play-again" class="btn primary">Main Lagi</button>
+          <button id="btn-back-home" class="btn ghost">Kembali</button>
+        </div>
+
+        <div class="teacher-sign" aria-hidden="true">
+          <div class="sign-line">Terima kasih sudah belajar!</div>
+          <div class="sign-line">Tetap semangat ya! 🌟</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+
